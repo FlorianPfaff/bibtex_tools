@@ -4,15 +4,16 @@
 # Use Python 3.6 or later!
 
 import bibtexparser
+import argparse
 from bibtexparser.bparser import BibTexParser
 from bibtexparser.customization import convert_to_unicode
 from bibtexparser.bwriter import BibTexWriter
 from bibtexparser.bibdatabase import BibDatabase
 from pathlib import Path
 
-def create_publications_table():
-    bibtex_file_path = Path('/localhome/isaswebwiki/ISASPublikationen/ISASFused.bib')
-    output_file_path = Path('/localhome/isaswebwiki/isas.iar.kit.edu/publications.table')
+def create_publications_table(bibtex_file_path, output_file_path):
+    bibtex_file_path = Path(bibtex_file_path)
+    output_file_path = Path(output_file_path)
 
     with bibtex_file_path.open() as bibtex_file:
         parser = BibTexParser(common_strings=True)
@@ -126,4 +127,9 @@ def create_publications_table():
         outputFile.write('</tbody></table>')
 
 if __name__ == "__main__":
-    create_publications_table()
+    parser = argparse.ArgumentParser(description="Create a publications table from a BibTeX file.")
+    parser.add_argument("input", help="Path to the BibTeX file.")
+    parser.add_argument("output", help="Path to the output file.")
+    args = parser.parse_args()
+
+    create_publications_table(args.input, args.output)
