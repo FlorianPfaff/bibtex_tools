@@ -70,7 +70,7 @@ de.TypeYear = "Typ / Jahr"
 de.Total = "Gesamt"
 
 Langs = [ en ]
-def parse_bib_files(filelist):
+def parse_bib_files(file_list):
   """
     Parse the given list of BibTeX files and return a catalog with publication counts.
 
@@ -83,31 +83,29 @@ def parse_bib_files(filelist):
   catalog = dict()
 
   # parse bibtex files
-  for file in filelist:
-    with open(file) as bibtex_file:
+  for file_name in file_list:
+    with open(file_name) as bibtex_file:
       parser = BibTexParser(common_strings=True)
       parser.customization = convert_to_unicode
       parser.customization = author
       
       bibdata = bibtexparser.load(bibtex_file, parser=parser)
-        
-    isPreprints = (PREPRINTS_FILE_STR in file)
 
     for entry in bibdata.entries:
     
-      if (isPreprints):
+      if 'arXiv' in entry['ID'] :
         etype = PREPRINTS_STR
       else:
-        bibType = entry['ENTRYTYPE']
+        bib_type = entry['ENTRYTYPE']
         try:
-          etype = NAMES[bibType]
+          etype = NAMES[bib_type]
         except KeyError:
           etype = "Other"
       
       try:
         year = entry['year']
       except KeyError:
-        print (f"Entry '{entry.key}' has no year!")
+        warnings.warn(f"Entry '{entry.key}' has no year!")
         continue
 
       if year < MIN_YEAR:
@@ -140,8 +138,8 @@ def parse_bib_files(filelist):
         except KeyError:
             continue
       for conf in special_headers:
-          confString = special_header_strings[conf]
-          if confString in title:
+          conf_string = special_header_strings[conf]
+          if conf_string in title:
               if not conf in catalog[year]:
                   catalog[year][conf] = set()
               catalog[year][conf].add(entry['ID'])
@@ -155,7 +153,7 @@ def create_counts_table(output_type, filelist):
       filelist (list): List of BibTeX file names to process.
   """
   catalog = parse_bib_files(filelist)
-  numFullHeaders = len(FullHeaders)
+  num_full_headers = len(FullHeaders)
 
   years = sorted(catalog.keys(), reverse=True)
   numYears = len(years)
@@ -169,7 +167,7 @@ def create_counts_table(output_type, filelist):
 
   if output_type == "full":
     print(f"{en.TypeYear},<b>Total</b>," + ",".join( (f'<a href="#{year}">{year}</a>') for year in years))
-    for h in range(0, numFullHeaders):
+    for h in range(0, num_full_headers):
       print(f"{','.join(lang.FullHeaders[h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>," + ",".join(str(yt) for yt in fullData[h]))
     print(f"{','.join(lang.Total for lang in Langs)},<b>{sum(yearTotals)}</b>," + ",".join(str(yt) for yt in yearTotals))
   elif output_type == "simple":
