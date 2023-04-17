@@ -1,8 +1,9 @@
+import argparse
 import warnings
+
 import bibtexparser
 from bibtexparser.bparser import BibTexParser
 from bibtexparser.customization import author, convert_to_unicode
-import argparse
 
 ENABLEEXTRAS = False
 
@@ -167,7 +168,7 @@ def parse_bib_files(file_list):
 
             if (
                 not any("Hanebeck" in name for name in authors)
-                and not "Hanebeck" in authors
+                and "Hanebeck" not in authors
             ):
                 warnings.warn(
                     f'Publication {entry["ID"]} is not by Hanebeck but by {authors}'
@@ -190,7 +191,7 @@ def parse_bib_files(file_list):
             for conf in special_headers:
                 conf_string = special_header_strings[conf]
                 if conf_string in title:
-                    if not conf in catalog[year]:
+                    if conf not in catalog[year]:
                         catalog[year][conf] = set()
                     catalog[year][conf].add(entry["ID"])
         return catalog
