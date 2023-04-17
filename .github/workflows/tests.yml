@@ -52,7 +52,22 @@ jobs:
 
       - name: Check output files
         run: |
+          test_output_counts_size=$(stat -c%s "test_output_counts.xml")
+          test_output_table_size=$(stat -c%s "test_output_table.table")
+          isas_publikationen_size=$(stat -c%s "ISASPublikationen.bib")
+
           if [ ! -s test_output_table.table ] || [ ! -s test_output_counts.xml ]; then
             echo "Error: Output files are empty."
+            exit 1
+          fi
+
+          if [ $test_output_counts_size -lt 1024 ]; then
+            echo "Error: test_output_counts.xml is less than 1 kilobyte."
+            exit 1
+          fi
+
+          half_isas_publikationen_size=$((isas_publikationen_size / 2))
+          if [ $test_output_table_size -lt $half_isas_publikationen_size ]; then
+            echo "Error: test_output_table.table is less than half the size of ISASPublikationen.bib."
             exit 1
           fi
