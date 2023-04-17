@@ -97,7 +97,7 @@ de.TableHeaders = [
     'style="width:10px; height:10px; display: inline-block;"></div> In Büchern </div>',
     '<div align="left"><div class="balken-book" '
     'style="width:10px; height:10px; display: inline-block;"></div> '
-    'Editor von Büchern oder Zeitschriften </div>',
+    "Editor von Büchern oder Zeitschriften </div>",
     '<div align="left"><div class="balken-phdthesis" '
     'style="width:10px; height:10px; display: inline-block;"></div> Bücher und Thesen </div>',
     '<div align="left"><div class="balken-preprint" '
