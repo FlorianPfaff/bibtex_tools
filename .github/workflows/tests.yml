@@ -1,6 +1,8 @@
 ---
 name: Process BibTeX Workflow
 
+permissions: read-all
+
 on:
   push:
     branches:
@@ -13,40 +15,44 @@ jobs:
   process_bibtex:
     runs-on: ubuntu-latest
 
+    permissions:
+      checks: write
+      pull-requests: write
+
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v3
 
-    - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        activate-environment: bibtex_processing
-        environment-file: environment.yml
-        auto-activate-base: false
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: bibtex_processing
+          environment-file: environment.yml
+          auto-activate-base: false
 
-    - name: List files and check Python version
-      shell: bash -l {0}
-      run: |
-        ls -al
-        python -c 'import sys; print(sys.version_info[:])'
+      - name: List files and check Python version
+        shell: bash -l {0}
+        run: |
+          ls -al
+          python -c 'import sys; print(sys.version_info[:])'
 
-    - name: Download ISASPublikationen.bib
-      run: |
-        curl -O https://raw.githubusercontent.com/KIT-ISAS/ISAS-Publications/master/ISASPublikationen.bib
+      - name: Download ISASPublikationen.bib
+        run: |
+          curl -O https://raw.githubusercontent.com/KIT-ISAS/ISAS-Publications/master/ISASPublikationen.bib
 
-    - name: Run bibtex_to_table.py
-      shell: bash -l {0}
-      run: |
-        python bibtex_to_table.py ISASPublikationen.bib test_output_table.table
+      - name: Run bibtex_to_table.py
+        shell: bash -l {0}
+        run: |
+          python bibtex_to_table.py ISASPublikationen.bib test_output_table.table
 
-    - name: Run generate_publication_counts_table.py
-      shell: bash -l {0}
-      run: |
-        python generate_publication_counts_table.py ISASPublikationen.bib 1> test_output_counts.xml
+      - name: Run generate_publication_counts_table.py
+        shell: bash -l {0}
+        run: |
+          python generate_publication_counts_table.py ISASPublikationen.bib 1> test_output_counts.xml
 
-    - name: Check output files
-      run: |
-        if [ ! -s test_output_table.table ] || [ ! -s test_output_counts.xml ]; then
-          echo "Error: Output files are empty."
-          exit 1
-        fi
+      - name: Check output files
+        run: |
+          if [ ! -s test_output_table.table ] || [ ! -s test_output_counts.xml ]; then
+            echo "Error: Output files are empty."
+            exit 1
+          fi
