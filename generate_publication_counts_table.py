@@ -52,18 +52,29 @@ special_header_strings = {
 
 en = Lang()
 en.TableHeaders = [
-    '<div align="left"><div class="balken-inproceedings" style="align:left; width:10px; height:10px; display: inline-block;"></div> Conferences </div>',
-    '<div align="left"><div class="balken-article" style="width:10px; height:10px; display: inline-block;"></div> Journals </div>',
-    '<div align="left"><div class="balken-inbook" style="width:10px; height:10px; display: inline-block;"></div> In Books </div>',
-    '<div align="left"><div class="balken-book" style="width:10px; height:10px; display: inline-block;"></div> Editorship </div>',
-    '<div align="left"><div class="balken-phdthesis" style="width:10px; height:10px; display: inline-block;"></div> Books and Theses </div>',
-    '<div align="left"><div class="balken-preprint" style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
-    '<div align="left"><div class="balken-other" style="width:10px; height:10px; display: inline-block;"></div> Other </div>',
+    '<div align="left"><div class="balken-inproceedings" '
+    'style="align:left; width:10px; height:10px; display: inline-block;"></div> Conferences </div>',
+    '<div align="left"><div class="balken-article" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Journals </div>',
+    '<div align="left"><div class="balken-inbook" '
+    'style="width:10px; height:10px; display: inline-block;"></div> In Books </div>',
+    '<div align="left"><div class="balken-book" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Editorship </div>',
+    '<div align="left"><div class="balken-phdthesis" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Books and Theses </div>',
+    '<div align="left"><div class="balken-preprint" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
+    '<div align="left"><div class="balken-other" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Other </div>',
 ]
 if ENABLEEXTRAS:
     en.SpecialHeaders = [
-        '<div class="balken-fusion" style="width:10px; height:10px; display: inline-block;"></div> <div style="text-indent:20px;width:10px; height:10px; display: inline-block;"><span title="Fusion: International Conference on Information Fusion">Fusion</span></div>',
-        '<div class="balken-mfi" style="width:10px; height:10px; display: inline-block;"></div> <div style="text-indent:20px;width:10px; height:10px; display: inline-block;"><span title="MFI: IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems">MFI</span></div>',
+        '<div class="balken-fusion" style="width:10px; height:10px; display: inline-block;"></div> '
+        '<div style="text-indent:20px;width:10px; height:10px; display: inline-block;">'
+        '<span title="Fusion: International Conference on Information Fusion">Fusion</span></div>',
+        '<div class="balken-mfi" style="width:10px; height:10px; display: inline-block;"></div> '
+        '<div style="text-indent:20px;width:10px; height:10px; display: inline-block;">'
+        '<span title="MFI: IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems">MFI</span></div>',
     ]
 else:
     en.SpecialHeaders = []
@@ -77,13 +88,21 @@ en.Total = '<div align="left">Total</div>'
 
 de = Lang()
 de.TableHeaders = [
-    '<div align="left"><div class="balken-inproceedings" style="width:10px; height:10px; display: inline-block;"></div> Konferenzen </div>',
-    '<div align="left"><div class="balken-article" style="width:10px; height:10px; display: inline-block;"></div> Zeitschriften </div>',
-    '<div align="left"><div class="balken-inbook" style="width:10px; height:10px; display: inline-block;"></div> In Büchern </div>',
-    '<div align="left"><div class="balken-book" style="width:10px; height:10px; display: inline-block;"></div> Editor von Büchern oder Zeitschriften </div>',
-    '<div align="left"><div class="balken-phdthesis" style="width:10px; height:10px; display: inline-block;"></div> Bücher und Thesen </div>',
-    '<div align="left"><div class="balken-preprint" style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
-    '<div align="left"><div class="balken-other" style="width:10px; height:10px; display: inline-block;"></div> Andere </div>',
+    '<div align="left"><div class="balken-inproceedings" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Konferenzen </div>',
+    '<div align="left"><div class="balken-article" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Zeitschriften </div>',
+    '<div align="left"><div class="balken-inbook" '
+    'style="width:10px; height:10px; display: inline-block;"></div> In Büchern </div>',
+    '<div align="left"><div class="balken-book" '
+    'style="width:10px; height:10px; display: inline-block;"></div> '
+    'Editor von Büchern oder Zeitschriften </div>',
+    '<div align="left"><div class="balken-phdthesis" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Bücher und Thesen </div>',
+    '<div align="left"><div class="balken-preprint" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
+    '<div align="left"><div class="balken-other" '
+    'style="width:10px; height:10px; display: inline-block;"></div> Andere </div>',
 ]
 
 de.SpecialHeaders = en.SpecialHeaders
