@@ -2,8 +2,8 @@
 APPLY_FIXES: all
 
 PRE_COMMANDS:
-  - command: "pip install bibtexparser"
-    cwd: "workspace" # Will be run at the root of the workspace
+  - command: pip install bibtexparser
+    venv: pylint # Will be run within pylint python virtualenv
 
 DISABLE_LINTERS:
   - SPELL_CSPELL
