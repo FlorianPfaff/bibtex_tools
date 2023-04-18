@@ -51,8 +51,10 @@ special_header_strings = {
     "MFI": "International Conference on Multisensor Fusion",
 }
 
-en = Lang()
-en.TableHeaders = [
+
+####
+en = {
+    "TableHeaders": [
     '<div align="left"><div class="balken-inproceedings" '
     'style="align:left; width:10px; height:10px; display: inline-block;"></div> Conferences </div>',
     '<div align="left"><div class="balken-article" '
@@ -67,53 +69,47 @@ en.TableHeaders = [
     'style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
     '<div align="left"><div class="balken-other" '
     'style="width:10px; height:10px; display: inline-block;"></div> Other </div>',
-]
-if ENABLEEXTRAS:
-    en.SpecialHeaders = [
+    ],
+    "SpecialHeaders": [
         '<div class="balken-fusion" style="width:10px; height:10px; display: inline-block;"></div> '
         '<div style="text-indent:20px;width:10px; height:10px; display: inline-block;">'
         '<span title="Fusion: International Conference on Information Fusion">Fusion</span></div>',
         '<div class="balken-mfi" style="width:10px; height:10px; display: inline-block;"></div> '
         '<div style="text-indent:20px;width:10px; height:10px; display: inline-block;">'
         '<span title="MFI: IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems">MFI</span></div>',
-    ]
-else:
-    en.SpecialHeaders = []
-en.FullHeaders = en.TableHeaders[0:1] + en.SpecialHeaders + en.TableHeaders[1:]
+    ] if ENABLEEXTRAS else [],
+    "TypeYear": (
+        '<div style="width:125px; height:10px; display: inline-block;">Type / Year</div>'
+    ),
+    "Total": '<div align="left">Total</div>',
+}
+en["FullHeaders"] = en["TableHeaders"][0:1] + en["SpecialHeaders"] + en["TableHeaders"][1:]
 
-
-en.TypeYear = (
-    '<div style="width:125px; height:10px; display: inline-block;">Type / Year</div>'
-)
-en.Total = '<div align="left">Total</div>'
-
-de = Lang()
-de.TableHeaders = [
-    '<div align="left"><div class="balken-inproceedings" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Konferenzen </div>',
-    '<div align="left"><div class="balken-article" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Zeitschriften </div>',
-    '<div align="left"><div class="balken-inbook" '
-    'style="width:10px; height:10px; display: inline-block;"></div> In Büchern </div>',
-    '<div align="left"><div class="balken-book" '
-    'style="width:10px; height:10px; display: inline-block;"></div> '
-    "Editor von Büchern oder Zeitschriften </div>",
-    '<div align="left"><div class="balken-phdthesis" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Bücher und Thesen </div>',
-    '<div align="left"><div class="balken-preprint" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
-    '<div align="left"><div class="balken-other" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Andere </div>',
-]
-
-de.SpecialHeaders = en.SpecialHeaders
-de.FullHeaders = de.TableHeaders[0:1] + de.SpecialHeaders + de.TableHeaders[1:]
-
-de.TypeYear = "Typ / Jahr"
-de.Total = "Gesamt"
+de = {
+    "TableHeaders": [
+        '<div align="left"><div class="balken-inproceedings" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Konferenzen </div>',
+        '<div align="left"><div class="balken-article" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Zeitschriften </div>',
+        '<div align="left"><div class="balken-inbook" '
+        'style="width:10px; height:10px; display: inline-block;"></div> In Büchern </div>',
+        '<div align="left"><div class="balken-book" '
+        'style="width:10px; height:10px; display: inline-block;"></div> '
+        "Editor von Büchern oder Zeitschriften </div>",
+        '<div align="left"><div class="balken-phdthesis" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Bücher und Thesen </div>',
+        '<div align="left"><div class="balken-preprint" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
+        '<div align="left"><div class="balken-other" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Andere </div>',
+    ],
+    "SpecialHeaders": en["SpecialHeaders"],
+    "TypeYear": "Typ / Jahr",
+    "Total": "Gesamt",
+}
+de["FullHeaders"] = de["TableHeaders"][0:1] + de["SpecialHeaders"] + de["TableHeaders"][1:]
 
 Langs = [en]
-
 
 def parse_bib_files(file_list):
     """
@@ -232,16 +228,16 @@ def create_counts_table(output_type, filelist):
 
     if output_type == "full":
         print(
-            f"{en.TypeYear},<b>Total</b>,"
+            f"{en['TypeYear']},<b>Total</b>,"
             + ",".join((f'<a href="#{year}">{year}</a>') for year in years)
         )
         for h in range(0, num_full_headers):
             print(
-                f"{','.join(lang.FullHeaders[h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>,"
+                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>,"
                 + ",".join(str(yt) for yt in fullData[h])
             )
         print(
-            f"{','.join(lang.Total for lang in Langs)},<b>{sum(yearTotals)}</b>,"
+            f"{','.join(lang['Total'] for lang in Langs)},<b>{sum(yearTotals)}</b>,"
             + ",".join(str(yt) for yt in yearTotals)
         )
     elif output_type == "simple":
@@ -250,17 +246,17 @@ def create_counts_table(output_type, filelist):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
+    arg_parser = argparse.ArgumentParser(
         description="Generate publication counts from BibTeX files."
     )
-    parser.add_argument(
+    arg_parser.add_argument(
         "--output_type",
         choices=["full", "simple"],
         default="full",
         help="Choose output type: full or simple.",
     )
-    parser.add_argument("filelist", nargs="+", help="List of BibTeX files to process.")
-    args = parser.parse_args()
+    arg_parser.add_argument("filelist", nargs="+", help="List of BibTeX files to process.")
+    args = arg_parser.parse_args()
 
     output_type = args.output_type
     filelist = args.filelist
