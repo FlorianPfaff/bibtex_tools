@@ -233,8 +233,8 @@ def create_counts_table(output_type, filelist):
         )
         for h in range(0, num_full_headers):
             print(
-                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>,"
-                + ",".join(str(yt) for yt in fullData[h])
+                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>," +
+                f"{','.join(str(yt) for yt in fullData[h])}"
             )
         print(
             f"{','.join(lang['Total'] for lang in Langs)},<b>{sum(yearTotals)}</b>,"
