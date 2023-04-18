@@ -239,18 +239,23 @@ def create_counts_table(output_type, filelist):
     if output_type == "full":
         print(f"{en['TypeYear']},<b>Total</b>,", end="")
         print(",".join((f'<a href="#{year}">{year}</a>') for year in years))
-        
+
         for h in range(0, num_full_headers):
-            print(f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>,", end="")
+            print(
+                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>,",
+                end="",
+            )
             print(f"{','.join(str(yt) for yt in fullData[h])}")
 
-        print(f"{','.join(lang['Total'] for lang in Langs)},<b>{sum(yearTotals)}</b>,", end="")
+        print(
+            f"{','.join(lang['Total'] for lang in Langs)},<b>{sum(yearTotals)}</b>,",
+            end="",
+        )
         print(",".join(str(yt) for yt in yearTotals))
-        
+
     elif output_type == "simple":
         print(f"{','.join(TABLE_HEADERS)},Total")
         print(f"{','.join(str(ht) for ht in headerTotals)},{sum(yearTotals)}")
-
 
 
 if __name__ == "__main__":
