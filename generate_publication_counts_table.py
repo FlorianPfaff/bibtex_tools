@@ -77,7 +77,9 @@ en = {
     "Total": '<div align="left">Total</div>',
 }
 en["FullHeaders"] = (
-    list(en["TableHeaders"][0:1]) + list(en["SpecialHeaders"]) + list(en["TableHeaders"][1:])
+    list(en["TableHeaders"][0:1])
+    + list(en["SpecialHeaders"])
+    + list(en["TableHeaders"][1:])
 )
 
 de = {
@@ -103,7 +105,9 @@ de = {
     "Total": "Gesamt",
 }
 de["FullHeaders"] = (
-    list(de["TableHeaders"][0:1]) + list(de["SpecialHeaders"]) + list(de["TableHeaders"][1:])
+    list(de["TableHeaders"][0:1])
+    + list(de["SpecialHeaders"])
+    + list(de["TableHeaders"][1:])
 )
 
 Langs = [en]
