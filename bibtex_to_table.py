@@ -47,8 +47,8 @@ def create_publications_table(bibtex_file_path, output_file_path):
         "phdthesis",
     ]
 
-    with output_file_path.open("w", encoding="utf-8") as outputFile:
-        outputFile.write('<table id="qs_table" border="1"><tbody>\n')
+    with output_file_path.open("w", encoding="utf-8") as output_file:
+        output_file.write('<table id="qs_table" border="1"><tbody>\n')
 
         def writeEntry(entry):
             if "author" in entry.keys():
@@ -97,20 +97,20 @@ def create_publications_table(bibtex_file_path, output_file_path):
             elif "arXiv" in booktitle:
                 submissionType = "preprint"
 
-            outputFile.write(
+            output_file.write(
                 f'<tr id="{pubid}" class="entry">\n<td><div class="balken-{submissionType}"></div>\n</td>\n'
             )
-            outputFile.write(f"<td> <i>{authors}</i>,</br> <b>{title}</b>,</br>")
+            output_file.write(f"<td> <i>{authors}</i>,</br> <b>{title}</b>,</br>")
 
             if not booktitle == "none":
-                outputFile.write(f"{booktitle}, ")
+                output_file.write(f"{booktitle}, ")
 
             pages = entry.get("pages", "")
             volume = entry.get("volume", "")
             number = entry.get("number", "")
 
             if pages and volume and number:
-                outputFile.write(
+                output_file.write(
                     "{}({}):{}, ".format(
                         volume,
                         number,
@@ -118,58 +118,58 @@ def create_publications_table(bibtex_file_path, output_file_path):
                     )
                 )
             elif pages and volume:
-                outputFile.write(
+                output_file.write(
                     "{}:{}, ".format(
                         volume, pages.replace("--", "\u2013").replace("-", "\u2013")
                     )
                 )
             elif pages:
-                outputFile.write(
+                output_file.write(
                     "pp. {}, ".format(
                         pages.replace("--", "\u2013").replace("-", "\u2013")
                     )
                 )
 
             if "publisher" in entry.keys():
-                outputFile.write(f'{entry["publisher"]}, ')
+                output_file.write(f'{entry["publisher"]}, ')
             if "address" in entry.keys():
-                outputFile.write(f'{entry["address"]}, ')
+                output_file.write(f'{entry["address"]}, ')
 
             if "series" in entry.keys():
-                outputFile.write(f'{entry["series"]}, ')
+                output_file.write(f'{entry["series"]}, ')
 
             if not month == "none":
-                outputFile.write(f"{month}, ")
+                output_file.write(f"{month}, ")
 
-            outputFile.write(f'{entry["year"]}.\n')
-            outputFile.write(
+            output_file.write(f'{entry["year"]}.\n')
+            output_file.write(
                 '<p class="infolinks"> <a href="javascript:toggleInfo(\''
                 + pubid
                 + '\',\'bibtex\')"><img src="https://isas.iar.kit.edu/img/BibTeX.png" alt="BibTeX" /></a>'
             )
 
             if "pdf" in entry.keys():
-                outputFile.write(
+                output_file.write(
                     f' <a href="https://isas.iar.kit.edu/pdf/{entry["pdf"]}" target="_blank"><img src="https://isas.iar.kit.edu/img/PDF.png" alt="PDF" /></a>'
                 )
             if "url" in entry.keys() and (
                 "pdf" not in entry.keys() or submissionType == "article"
             ):
-                outputFile.write(f' <a href="{entry["url"]}" target="_blank">URL</a>')
+                output_file.write(f' <a href="{entry["url"]}" target="_blank">URL</a>')
             if "annote" in entry.keys():
-                outputFile.write(f' <font color="red">{entry["annote"]}</font>')
-            outputFile.write("</p>\n</td>\n</tr>\n")
-            outputFile.write(
+                output_file.write(f' <font color="red">{entry["annote"]}</font>')
+            output_file.write("</p>\n</td>\n</tr>\n")
+            output_file.write(
                 f'<tr id="bib_{pubid}" class="bibtex noshow"><td></td>\n<td><b>BibTeX</b>:\n<pre>\n'
             )
-            outputFile.write(bibtex)
-            outputFile.write("\n</pre>\n</td>\n</tr>\n\n")
+            output_file.write(bibtex)
+            output_file.write("\n</pre>\n</td>\n</tr>\n\n")
             # write_entry ends here
 
         # Determine relevant years
         allYears = set([entry["year"] for entry in bib_database.entries])
         for year in sorted(list(allYears), reverse=True):
-            outputFile.write(
+            output_file.write(
                 f'<tr class="year"><td></td><td><a name="{year}"></a>{year}</td></tr>\n'
             )
 
@@ -187,7 +187,7 @@ def create_publications_table(bibtex_file_path, output_file_path):
                         continue
                     writeEntry(entry)
 
-        outputFile.write("</tbody></table>")
+        output_file.write("</tbody></table>")
 
 
 if __name__ == "__main__":
