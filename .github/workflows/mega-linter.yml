@@ -40,13 +40,6 @@ jobs:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0 # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to improve performances
 
-      - name: Set up Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          activate-environment: bibtex_tools
-          environment-file: environment.yml
-          auto-activate-base: false
-
       # MegaLinter
       - name: MegaLinter
         id: ml
