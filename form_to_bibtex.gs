@@ -5,7 +5,7 @@ function onFormSubmit(e) {
   /*
   e = e || {
     namedValues: {
-      'Publikationstyp': ['Journal'],
+      'Publikationstyp': ['article'],
       'Autoren': ['John Doe'],
       'Papertitel': ['Test Paper'],
       'Name Journal': ['Test Journal'],
@@ -33,8 +33,30 @@ function onFormSubmit(e) {
   var pages = responses['pages'][0];
   var doi = responses['DOI'][0];
 
-  // Create a BibTeX entry
-  var bibEntry = '@' + bibType + '{' + author.replace(/ /g, '') + year + ',\n';
+  // Generate the BibTeX key
+  var source = journal || booktitle;
+  var key = '';
+  
+  if (booktitle && booktitle.toLowerCase().includes("conference on information fusion")) {
+    key = 'FUSION';
+  } else if (booktitle && booktitle.toLowerCase().includes("multisensor fusion and integration")) {
+    key = 'MFI';
+  } else {
+    var words = source.split(" ");
+    for (var i = 0; i < words.length; i++) {
+      if (words[i].toLowerCase() !== 'the' && words[i].toLowerCase() !== 'on') {
+        key += words[i].charAt(0);
+      }
+    }
+  }
+  key += year.slice(-2);
+
+  // Append an underscore and the last name of the first author
+  var firstAuthorLastName = author.split(" ")[-1];
+  key += '_' + firstAuthorLastName;
+
+  // Create the BibTeX entry
+  var bibEntry = '@' + bibType + '{' + key + ',\n';
   bibEntry += '  author = {' + author + '},\n';
   bibEntry += '  title = {' + title + '},\n';
 
