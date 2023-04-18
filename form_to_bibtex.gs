@@ -38,18 +38,32 @@ function onFormSubmit(e) {
   bibEntry += '  author = {' + author + '},\n';
   bibEntry += '  title = {' + title + '},\n';
 
-  if (bibType === 'article') {
+  if (bibType === 'article' && journal) {
     bibEntry += '  journal = {' + journal + '},\n';
   } else if (bibType === 'inproceedings') {
-    bibEntry += '  booktitle = {' + booktitle + '},\n';
-    bibEntry += '  address = {' + address + '},\n';
+    if (booktitle) {
+      bibEntry += '  booktitle = {' + booktitle + '},\n';
+    }
+    if (address) {
+      bibEntry += '  address = {' + address + '},\n';
+    }
   }
 
-  bibEntry += '  year = {' + year + '},\n';
-  bibEntry += '  volume = {' + volume + '},\n';
-  bibEntry += '  number = {' + number + '},\n';
-  bibEntry += '  pages = {' + pages + '},\n';
-  bibEntry += '  doi = {' + doi + '},\n';
+  if (year) {
+    bibEntry += '  year = {' + year + '},\n';
+  }
+  if (volume) {
+    bibEntry += '  volume = {' + volume + '},\n';
+  }
+  if (number) {
+    bibEntry += '  number = {' + number + '},\n';
+  }
+  if (pages) {
+    bibEntry += '  pages = {' + pages + '},\n';
+  }
+  if (doi) {
+    bibEntry += '  doi = {' + doi + '},\n';
+  }
   bibEntry += '}\n';
 
   var fromAddress = 'pfaff@kit.edu';
