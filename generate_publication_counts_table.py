@@ -19,17 +19,8 @@ NAMES = {
 }
 
 PREPRINTS_STR = "Preprints"  # name of 'preprints' header
-PREPRINTS_FILE_STR = (
-    "Preprints"  # string that, if file name contains it, marks file as preprints
-)
 AUTHOR_STR = "Hanebeck, Uwe D."  # name that must be contained in authors field
 MIN_YEAR = "1989"  # minimum year to display
-
-
-# create list of table headers
-class Lang:
-    pass
-
 
 TABLE_HEADERS = [
     "Conferences",
@@ -37,7 +28,7 @@ TABLE_HEADERS = [
     "In Books",
     "Editorship",
     "Books and Theses",
-    "Preprints",
+    PREPRINTS_STR,
     "Other",
 ]
 if ENABLEEXTRAS:
@@ -161,7 +152,7 @@ def parse_bib_files(file_list):
             if "author" in entry.keys():
                 authors = entry["author"]
                 if "editor" in entry.keys():
-                    authors += entry["editor"]
+                    authors += [entry["editor"]]
             elif (
                 "editor" in entry.keys()
             ):  # Use editor instead of author if no author is available
@@ -203,7 +194,7 @@ def parse_bib_files(file_list):
         return catalog
 
 
-def create_counts_table(output_type, filelist):
+def create_counts_table(output_type, file_list):
     """
     Generate the table from the publication counts
 
@@ -211,11 +202,11 @@ def create_counts_table(output_type, filelist):
         output_type (str): Output type, either "full" or "simple".
         filelist (list): List of BibTeX file names to process.
     """
-    catalog = parse_bib_files(filelist)
+    catalog = parse_bib_files(file_list)
     num_full_headers = len(FullHeaders)
 
     years = sorted(catalog.keys(), reverse=True)
-    numYears = len(years)
+    num_years = len(years)
 
     data = [
         [
@@ -224,17 +215,17 @@ def create_counts_table(output_type, filelist):
         ]
         for header in TABLE_HEADERS
     ]
-    headerTotals = [sum(row) for row in data]
-    yearTotals = [sum(row[y] for row in data) for y in range(0, numYears)]
+    header_totals = [sum(row) for row in data]
+    year_totals = [sum(row[y] for row in data) for y in range(0, num_years)]
 
-    fullData = [
+    full_data = [
         [
             (len(catalog[year][header]) if (header in catalog[year]) else 0)
             for year in years
         ]
         for header in FullHeaders
     ]
-    fullHeaderTotals = [sum(row) for row in fullData]
+    full_header_totals = [sum(row) for row in full_data]
 
     if output_type == "full":
         print(f"{en['TypeYear']},<b>Total</b>,", end="")
@@ -242,20 +233,20 @@ def create_counts_table(output_type, filelist):
 
         for h in range(0, num_full_headers):
             print(
-                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>,",
+                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{full_header_totals[h]}</b>,",
                 end="",
             )
-            print(f"{','.join(str(yt) for yt in fullData[h])}")
+            print(f"{','.join(str(yt) for yt in full_data[h])}")
 
         print(
-            f"{','.join(lang['Total'] for lang in Langs)},<b>{sum(yearTotals)}</b>,",
+            f"{','.join(lang['Total'] for lang in Langs)},<b>{sum(year_totals)}</b>,",
             end="",
         )
-        print(",".join(str(yt) for yt in yearTotals))
+        print(",".join(str(yt) for yt in year_totals))
 
     elif output_type == "simple":
         print(f"{','.join(TABLE_HEADERS)},Total")
-        print(f"{','.join(str(ht) for ht in headerTotals)},{sum(yearTotals)}")
+        print(f"{','.join(str(ht) for ht in header_totals)},{sum(year_totals)}")
 
 
 if __name__ == "__main__":
@@ -272,8 +263,5 @@ if __name__ == "__main__":
         "filelist", nargs="+", help="List of BibTeX files to process."
     )
     args = arg_parser.parse_args()
-
-    output_type = args.output_type
-    filelist = args.filelist
 
     create_counts_table(args.output_type, args.filelist)
