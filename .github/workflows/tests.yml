@@ -71,4 +71,3 @@ jobs:
             echo "Error: test_output_table.table is less than half the size of ISASPublikationen.bib."
             exit 1
           fi
-

@@ -19,17 +19,8 @@ NAMES = {
 }
 
 PREPRINTS_STR = "Preprints"  # name of 'preprints' header
-PREPRINTS_FILE_STR = (
-    "Preprints"  # string that, if file name contains it, marks file as preprints
-)
 AUTHOR_STR = "Hanebeck, Uwe D."  # name that must be contained in authors field
 MIN_YEAR = "1989"  # minimum year to display
-
-
-# create list of table headers
-class Lang:
-    pass
-
 
 TABLE_HEADERS = [
     "Conferences",
@@ -37,7 +28,7 @@ TABLE_HEADERS = [
     "In Books",
     "Editorship",
     "Books and Theses",
-    "Preprints",
+    PREPRINTS_STR,
     "Other",
 ]
 if ENABLEEXTRAS:
@@ -55,20 +46,20 @@ special_header_strings = {
 ####
 en = {
     "TableHeaders": [
-    '<div align="left"><div class="balken-inproceedings" '
-    'style="align:left; width:10px; height:10px; display: inline-block;"></div> Conferences </div>',
-    '<div align="left"><div class="balken-article" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Journals </div>',
-    '<div align="left"><div class="balken-inbook" '
-    'style="width:10px; height:10px; display: inline-block;"></div> In Books </div>',
-    '<div align="left"><div class="balken-book" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Editorship </div>',
-    '<div align="left"><div class="balken-phdthesis" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Books and Theses </div>',
-    '<div align="left"><div class="balken-preprint" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
-    '<div align="left"><div class="balken-other" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Other </div>',
+        '<div align="left"><div class="balken-inproceedings" '
+        'style="align:left; width:10px; height:10px; display: inline-block;"></div> Conferences </div>',
+        '<div align="left"><div class="balken-article" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Journals </div>',
+        '<div align="left"><div class="balken-inbook" '
+        'style="width:10px; height:10px; display: inline-block;"></div> In Books </div>',
+        '<div align="left"><div class="balken-book" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Editorship </div>',
+        '<div align="left"><div class="balken-phdthesis" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Books and Theses </div>',
+        '<div align="left"><div class="balken-preprint" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
+        '<div align="left"><div class="balken-other" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Other </div>',
     ],
     "SpecialHeaders": [
         '<div class="balken-fusion" style="width:10px; height:10px; display: inline-block;"></div> '
@@ -77,13 +68,19 @@ en = {
         '<div class="balken-mfi" style="width:10px; height:10px; display: inline-block;"></div> '
         '<div style="text-indent:20px;width:10px; height:10px; display: inline-block;">'
         '<span title="MFI: IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems">MFI</span></div>',
-    ] if ENABLEEXTRAS else [],
+    ]
+    if ENABLEEXTRAS
+    else [],
     "TypeYear": (
         '<div style="width:125px; height:10px; display: inline-block;">Type / Year</div>'
     ),
     "Total": '<div align="left">Total</div>',
 }
-en["FullHeaders"] = en["TableHeaders"][0:1] + en["SpecialHeaders"] + en["TableHeaders"][1:]
+en["FullHeaders"] = (
+    list(en["TableHeaders"][0:1])
+    + list(en["SpecialHeaders"])
+    + list(en["TableHeaders"][1:])
+)
 
 de = {
     "TableHeaders": [
@@ -107,9 +104,14 @@ de = {
     "TypeYear": "Typ / Jahr",
     "Total": "Gesamt",
 }
-de["FullHeaders"] = de["TableHeaders"][0:1] + de["SpecialHeaders"] + de["TableHeaders"][1:]
+de["FullHeaders"] = (
+    list(de["TableHeaders"][0:1])
+    + list(de["SpecialHeaders"])
+    + list(de["TableHeaders"][1:])
+)
 
 Langs = [en]
+
 
 def parse_bib_files(file_list):
     """
@@ -154,13 +156,16 @@ def parse_bib_files(file_list):
             if "author" in entry.keys():
                 authors = entry["author"]
                 if "editor" in entry.keys():
-                    authors += entry["editor"]
+                    authors += [entry["editor"]]
             elif (
                 "editor" in entry.keys()
             ):  # Use editor instead of author if no author is available
                 authors = entry["editor"]
             else:  # Entry has neither author nor editor, this must not happen
-                raise ValueError(entry["ID"] + " has neither author nor editor, this must not happen.")
+                raise ValueError(
+                    entry["ID"]
+                    + " has neither author nor editor, this must not happen."
+                )
 
             if (
                 not any("Hanebeck" in name for name in authors)
@@ -193,7 +198,7 @@ def parse_bib_files(file_list):
         return catalog
 
 
-def create_counts_table(output_type, filelist):
+def create_counts_table(output_type, file_list):
     """
     Generate the table from the publication counts
 
@@ -201,11 +206,11 @@ def create_counts_table(output_type, filelist):
         output_type (str): Output type, either "full" or "simple".
         filelist (list): List of BibTeX file names to process.
     """
-    catalog = parse_bib_files(filelist)
+    catalog = parse_bib_files(file_list)
     num_full_headers = len(FullHeaders)
 
     years = sorted(catalog.keys(), reverse=True)
-    numYears = len(years)
+    num_years = len(years)
 
     data = [
         [
@@ -214,35 +219,38 @@ def create_counts_table(output_type, filelist):
         ]
         for header in TABLE_HEADERS
     ]
-    headerTotals = [sum(row) for row in data]
-    yearTotals = [sum(row[y] for row in data) for y in range(0, numYears)]
+    header_totals = [sum(row) for row in data]
+    year_totals = [sum(row[y] for row in data) for y in range(0, num_years)]
 
-    fullData = [
+    full_data = [
         [
             (len(catalog[year][header]) if (header in catalog[year]) else 0)
             for year in years
         ]
         for header in FullHeaders
     ]
-    fullHeaderTotals = [sum(row) for row in fullData]
+    full_header_totals = [sum(row) for row in full_data]
 
     if output_type == "full":
-        print(
-            f"{en['TypeYear']},<b>Total</b>,"
-            + ",".join((f'<a href="#{year}">{year}</a>') for year in years)
-        )
+        print(f"{en['TypeYear']},<b>Total</b>,", end="")
+        print(",".join((f'<a href="#{year}">{year}</a>') for year in years))
+
         for h in range(0, num_full_headers):
             print(
-                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>," +
-                f"{','.join(str(yt) for yt in fullData[h])}"
+                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{full_header_totals[h]}</b>,",
+                end="",
             )
+            print(f"{','.join(str(yt) for yt in full_data[h])}")
+
         print(
-            f"{','.join(lang['Total'] for lang in Langs)},<b>{sum(yearTotals)}</b>,"
-            + ",".join(str(yt) for yt in yearTotals)
+            f"{','.join(lang['Total'] for lang in Langs)},<b>{sum(year_totals)}</b>,",
+            end="",
         )
+        print(",".join(str(yt) for yt in year_totals))
+
     elif output_type == "simple":
         print(f"{','.join(TABLE_HEADERS)},Total")
-        print(f"{','.join(str(ht) for ht in headerTotals)},{sum(yearTotals)}")
+        print(f"{','.join(str(ht) for ht in header_totals)},{sum(year_totals)}")
 
 
 if __name__ == "__main__":
@@ -255,10 +263,9 @@ if __name__ == "__main__":
         default="full",
         help="Choose output type: full or simple.",
     )
-    arg_parser.add_argument("filelist", nargs="+", help="List of BibTeX files to process.")
+    arg_parser.add_argument(
+        "filelist", nargs="+", help="List of BibTeX files to process."
+    )
     args = arg_parser.parse_args()
-
-    output_type = args.output_type
-    filelist = args.filelist
 
     create_counts_table(args.output_type, args.filelist)
