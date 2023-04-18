@@ -160,7 +160,7 @@ def parse_bib_files(file_list):
             ):  # Use editor instead of author if no author is available
                 authors = entry["editor"]
             else:  # Entry has neither author nor editor, this must not happen
-                raise
+                raise ValueError(entry["ID"] + " has neither author nor editor, this must not happen.")
 
             if (
                 not any("Hanebeck" in name for name in authors)
