@@ -58,7 +58,7 @@ def create_publications_table(bibtex_file_path, output_file_path):
             ):  # Use editor instead of author if no author is available
                 authors = entry["editor"] + " (Eds.)"
             else:  # Entry has neither author nor editor, this must not happen
-                raise
+                raise ValueError(entry['ID'] + " has neither author nor editor, this must not happen.")
 
             title = entry["title"]
 
