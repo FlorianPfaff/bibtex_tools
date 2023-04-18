@@ -55,20 +55,20 @@ special_header_strings = {
 ####
 en = {
     "TableHeaders": [
-    '<div align="left"><div class="balken-inproceedings" '
-    'style="align:left; width:10px; height:10px; display: inline-block;"></div> Conferences </div>',
-    '<div align="left"><div class="balken-article" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Journals </div>',
-    '<div align="left"><div class="balken-inbook" '
-    'style="width:10px; height:10px; display: inline-block;"></div> In Books </div>',
-    '<div align="left"><div class="balken-book" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Editorship </div>',
-    '<div align="left"><div class="balken-phdthesis" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Books and Theses </div>',
-    '<div align="left"><div class="balken-preprint" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
-    '<div align="left"><div class="balken-other" '
-    'style="width:10px; height:10px; display: inline-block;"></div> Other </div>',
+        '<div align="left"><div class="balken-inproceedings" '
+        'style="align:left; width:10px; height:10px; display: inline-block;"></div> Conferences </div>',
+        '<div align="left"><div class="balken-article" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Journals </div>',
+        '<div align="left"><div class="balken-inbook" '
+        'style="width:10px; height:10px; display: inline-block;"></div> In Books </div>',
+        '<div align="left"><div class="balken-book" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Editorship </div>',
+        '<div align="left"><div class="balken-phdthesis" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Books and Theses </div>',
+        '<div align="left"><div class="balken-preprint" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Preprints </div>',
+        '<div align="left"><div class="balken-other" '
+        'style="width:10px; height:10px; display: inline-block;"></div> Other </div>',
     ],
     "SpecialHeaders": [
         '<div class="balken-fusion" style="width:10px; height:10px; display: inline-block;"></div> '
@@ -77,13 +77,17 @@ en = {
         '<div class="balken-mfi" style="width:10px; height:10px; display: inline-block;"></div> '
         '<div style="text-indent:20px;width:10px; height:10px; display: inline-block;">'
         '<span title="MFI: IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems">MFI</span></div>',
-    ] if ENABLEEXTRAS else [],
+    ]
+    if ENABLEEXTRAS
+    else [],
     "TypeYear": (
         '<div style="width:125px; height:10px; display: inline-block;">Type / Year</div>'
     ),
     "Total": '<div align="left">Total</div>',
 }
-en["FullHeaders"] = en["TableHeaders"][0:1] + en["SpecialHeaders"] + en["TableHeaders"][1:]
+en["FullHeaders"] = (
+    en["TableHeaders"][0:1] + en["SpecialHeaders"] + en["TableHeaders"][1:]
+)
 
 de = {
     "TableHeaders": [
@@ -107,9 +111,12 @@ de = {
     "TypeYear": "Typ / Jahr",
     "Total": "Gesamt",
 }
-de["FullHeaders"] = de["TableHeaders"][0:1] + de["SpecialHeaders"] + de["TableHeaders"][1:]
+de["FullHeaders"] = (
+    de["TableHeaders"][0:1] + de["SpecialHeaders"] + de["TableHeaders"][1:]
+)
 
 Langs = [en]
+
 
 def parse_bib_files(file_list):
     """
@@ -160,7 +167,10 @@ def parse_bib_files(file_list):
             ):  # Use editor instead of author if no author is available
                 authors = entry["editor"]
             else:  # Entry has neither author nor editor, this must not happen
-                raise ValueError(entry["ID"] + " has neither author nor editor, this must not happen.")
+                raise ValueError(
+                    entry["ID"]
+                    + " has neither author nor editor, this must not happen."
+                )
 
             if (
                 not any("Hanebeck" in name for name in authors)
@@ -233,8 +243,8 @@ def create_counts_table(output_type, filelist):
         )
         for h in range(0, num_full_headers):
             print(
-                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>," +
-                f"{','.join(str(yt) for yt in fullData[h])}"
+                f"{','.join(lang['FullHeaders'][h] for lang in Langs)},<b>{fullHeaderTotals[h]}</b>,"
+                + f"{','.join(str(yt) for yt in fullData[h])}"
             )
         print(
             f"{','.join(lang['Total'] for lang in Langs)},<b>{sum(yearTotals)}</b>,"
@@ -255,7 +265,9 @@ if __name__ == "__main__":
         default="full",
         help="Choose output type: full or simple.",
     )
-    arg_parser.add_argument("filelist", nargs="+", help="List of BibTeX files to process.")
+    arg_parser.add_argument(
+        "filelist", nargs="+", help="List of BibTeX files to process."
+    )
     args = arg_parser.parse_args()
 
     output_type = args.output_type
